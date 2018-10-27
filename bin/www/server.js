@@ -1,6 +1,9 @@
 const path = require('path');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const swaggerDocument = YAML.load(path.join(__dirname, './swagger/api.yaml'));
 const app = require('./../../app');
