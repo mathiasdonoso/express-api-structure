@@ -1,5 +1,5 @@
 {
-  "name": "express-api-project",
+  "name": "express-api-structure",
   "version": "0.0.1",
   "description": "Basic API project structure using node and express",
   "main": "bin/www/server.js",
