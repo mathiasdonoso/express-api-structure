@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const components = require('./components');
+const api = require('./api');
 
 const app = express();
 
@@ -18,6 +18,6 @@ app.use(helmet());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use('/api', components);
+app.use('/api', api);
 
 module.exports = app;
