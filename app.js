@@ -18,7 +18,6 @@ app.use(helmet());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-app.use('/api/users', components.users.api);
+app.use('/api', components);
 
 module.exports = app;
