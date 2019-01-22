@@ -4,13 +4,11 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const api = require('./api');
+const { colorfulLog } = require('./lib/logger');
 
 const app = express();
 
-const loggerFormat = ':id [:date[web]] ":method :url" :status :response-time';
-
-app.use(morgan(loggerFormat, {
-  skip: (req, res) => res.statusCode < 400,
+app.use(morgan(colorfulLog, {
   stream: process.stderr,
 }));
 
