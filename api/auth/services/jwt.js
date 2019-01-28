@@ -43,7 +43,6 @@ module.exports = {
     try {
       return jwt.verify(token, publicKEY, verifyOptions);
     } catch (err) {
-      console.error(err);
       return false;
     }
   },
