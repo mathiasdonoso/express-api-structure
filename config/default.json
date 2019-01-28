@@ -1,9 +1,0 @@
-{
-  "users": {
-    "db": {
-      "host": "localhost",
-      "port": 5984,
-      "dbName": "users"
-    }
-  }
-}
