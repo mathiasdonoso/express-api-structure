@@ -10,7 +10,7 @@
   },
   "pre-commit": [
     "linter",
-    "jest"
+    "test"
   ],
   "author": "Mathías Donoso <mathiasd88@gmail.com>",
   "license": "MIT",
