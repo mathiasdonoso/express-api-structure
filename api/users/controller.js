@@ -1,7 +1,11 @@
 const me = (req, res, next) => {
-  res.status(200).json({
-    message: 'Hello world',
-  });
+  try {
+    res.status(200).json({
+      message: 'Hello world',
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {

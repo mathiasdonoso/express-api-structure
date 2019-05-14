@@ -1,5 +1,4 @@
 const express = require('express');
-const expressValidator = require('express-validator');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const compression = require('compression');
@@ -19,7 +18,6 @@ app.use(helmet());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ limit: '200kb' }));
-app.use(expressValidator());
 app.use('/api', api);
 
 module.exports = app;

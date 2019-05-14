@@ -1,5 +1,3 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-shadow */
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt-nodejs');
 
@@ -19,8 +17,8 @@ UserSchema.pre('save', function save(next) {
 
   bcrypt.genSalt(10, (err, salt) => {
     if (err) { return next(err); }
-    bcrypt.hash(user.password, salt, undefined, (err, hash) => {
-      if (err) { return next(err); }
+    bcrypt.hash(user.password, salt, undefined, (hashError, hash) => {
+      if (hashError) { return next(hashError); }
       user.password = hash;
       next();
     });

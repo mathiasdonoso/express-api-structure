@@ -1,10 +1,9 @@
-const { verify } = require('./services/jwt');
+const { verify } = require('./jwt');
 
 const authenticate = (req, res, next) => {
   const token = req.headers['auth-token'];
   const options = {
     issuer: 'Authorization',
-    // subject: 'mathiasd88@gmail.com',
     audience: req.body.client || 'web', // this should be provided by client
   };
 

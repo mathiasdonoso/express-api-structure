@@ -1,17 +1,21 @@
-/* eslint-disable no-shadow */
+const Joi = require('@hapi/joi');
+
 const User = require('./models/User');
-const jwt = require('./services/jwt');
+const jwt = require('./jwt');
 
 const login = async (req, res, next) => {
-  req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password cannot be blank').notEmpty();
-  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+  const paramsSchema = Joi.object().keys({
+    email: Joi.string()
+      .email().min(8).max(32)
+      .required(),
+    password: Joi.string().required(),
+  });
 
-  const errors = req.validationErrors();
+  const validation = Joi.validate(req.body, paramsSchema);
 
-  if (errors) {
-    res.status(500).json({
-      errors,
+  if (validation.error !== null) {
+    return res.status(500).json({
+      errors: [{ msg: validation.error }],
     });
   }
 
@@ -20,7 +24,7 @@ const login = async (req, res, next) => {
 
     user.comparePassword(req.body.password, (err) => {
       if (err) {
-        res.status(500).json({
+        return res.status(500).json({
           errors: [{ msg: 'Invalid credentials' }],
         });
       }
@@ -31,7 +35,7 @@ const login = async (req, res, next) => {
         audience: req.body.client || 'web', // this should be provided by client
       };
 
-      res.status(200).json({
+      return res.status(200).json({
         error: null,
         data: {
           token: jwt.sign(JSON.stringify({
@@ -47,31 +51,35 @@ const login = async (req, res, next) => {
 };
 
 const signup = async (req, res, next) => {
-  req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password must be at least 6 characters long').len({ min: 6 });
-  req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+  const paramsSchema = Joi.object().keys({
+    email: Joi.string()
+      .email().min(8).max(32)
+      .required(),
+    password: Joi.string().required(),
+  });
 
-  const errors = req.validationErrors();
+  const validation = Joi.validate(req.body, paramsSchema);
 
-  if (errors) {
-    res.status(500).json({
-      errors,
+  if (validation.error !== null) {
+    return res.status(500).json({
+      errors: [{ msg: validation.error }],
     });
   }
 
   try {
+    const userAlreadyExists = await User.findOne({ email: req.body.email });
+    if (userAlreadyExists) {
+      return res.status(500).json({
+        errors: [{ msg: 'Account with that email address already exists.' }],
+      });
+    }
+
     const user = new User({
       email: req.body.email,
       password: req.body.password,
     });
-    const userAlreadyExists = await User.findOne({ email: req.body.email });
-    if (userAlreadyExists) {
-      res.status(500).json({
-        errors: [{ msg: 'Account with that email address already exists.' }],
-      });
-    } else {
-      await user.save();
-    }
+
+    await user.save();
 
     res.status(200).json({
       error: null,

@@ -3,5 +3,11 @@
     "env": {
         "node": true,
         "jest": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2017
+    },
+    "rules": {
+        "consistent-return": "off"
     }
 }

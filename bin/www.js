@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const numCPUs = require('os').cpus().length;
 const app = require('./../app');
 const { logger } = require('./../lib/logger');
-const { MONGODB_URI } = require('./../config/secrets');
+const { MONGODB_URI } = require('./../config/settings');
 
 dotenv.config();
 
@@ -21,9 +21,7 @@ if (cluster.isMaster) {
 } else {
   const port = process.env.PORT || 3000;
 
-  app.set('port', port);
-
-  app.use((err, req, res, next) => {
+  app.use((err, req, res) => {
     logger.error(err.stack);
     res.status(500).json({
       error: err,
